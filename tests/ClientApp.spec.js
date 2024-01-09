@@ -32,4 +32,8 @@ test('Login Test', async ({page})=>
 
     // 4. Buy the product
     await allTitleContents.nth(targetProductIndex).locator("[style='float: right;']").click();
+
+    // 5. Click the cart page
+    await page.locator("[routerlink='/dashboard/cart']").click();
+
 });
