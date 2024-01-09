@@ -50,4 +50,11 @@ test('Login Test', async ({page})=>
     // 9. Verify product & quantity
     await expect(page.locator(".item__title")).toHaveText(productName);
     await expect(page.locator(".item__quantity")).toContainText("1");
+
+    // 10. Select country for shipping info from pre-populated list
+    const shippingCountry = page.locator("[placeholder='Select Country']");
+    await shippingCountry.pressSequentially("United");
+    const prepopulatedList = page.locator(".ta-item");
+    await prepopulatedList.last().waitFor();
+    await prepopulatedList.getByText(/.*United States$/).click();
 });
