@@ -18,22 +18,12 @@ test('Login Test', async ({page})=>
     await page.locator("#userPassword").fill("Lindy123$");
     await page.locator("#login").click();
 
-    //Check last item in list is there post login
+    // 3. Find the specific product to buy
     const allTitleContents = await page.locator(".card-body b");
-    await allTitleContents.last().waitFor();
+    const desiredProduct = await allTitleContents.getByText("ADIDAS ORIGINAL");
+    await desiredProduct.waitFor();
 
     // 2. Print titles on page
     const allTitles = await allTitleContents.allTextContents();
     console.log(allTitles);
-
-    // 3. Find the specific product to buy
-    const desiredProductName = "ADIDAS ORIGINAL"
-    let targetProduct = undefined;
-    for (let i = 0; i < await allTitleContents.count() && targetProduct == undefined; i++){
-        if (await allTitleContents.nth(i).textContent() == desiredProductName){
-            targetProduct = allTitleContents.nth(i);
-        }
-    }
-    await expect(await targetProduct != undefined).toBeTruthy();
-
 });
