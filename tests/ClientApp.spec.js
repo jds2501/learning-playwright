@@ -39,4 +39,7 @@ test('Login Test', async ({page})=>
 
     // 6. Check that the right product is present
     await expect(page.locator(".cartSection h3")).toContainText(productName);
+
+    // 7. Click the checkout button
+    await page.getByRole('button', { name: "Checkout"}).click();
 });
