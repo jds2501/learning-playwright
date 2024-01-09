@@ -26,7 +26,10 @@ test('Login Test', async ({page})=>
     const allTitles = await allTitleContents.locator("b").allTextContents();
     console.log(allTitles);
 
+    // 3. Find the product to buy
     const targetProductIndex = allTitles.indexOf("ADIDAS ORIGINAL");
     expect(targetProductIndex >= 0).toBeTruthy();
-    console.log(targetProductIndex);
+
+    // 4. Buy the product
+    await allTitleContents.nth(targetProductIndex).locator("[style='float: right;']").click();
 });
