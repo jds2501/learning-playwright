@@ -45,6 +45,9 @@ test('Login Test', async ({page})=>
     await page.getByRole('button', { name: "Checkout"}).click();
 
     // 8. Make sure the email is pre-populated
-    await expect(page.locator("[style='color: lightgray; font-weight: 600;']")).toContainText(email, {timeout: 20000})
+    await expect(page.locator("[style='color: lightgray; font-weight: 600;']")).toHaveText(email, {timeout: 20000})
 
+    // 9. Verify product & quantity
+    await expect(page.locator(".item__title")).toHaveText(productName);
+    await expect(page.locator(".item__quantity")).toContainText("1");
 });
