@@ -13,8 +13,9 @@ test('Register Account Interactions', async ({page})=>
 test('Login Test', async ({page})=>
 {
     // 1. Login
+    const email = "descript.linking@gmail.com";
     await page.goto("https://rahulshettyacademy.com/client");
-    await page.locator("#userEmail").fill("descript.linking@gmail.com");
+    await page.locator("#userEmail").fill(email);
     await page.locator("#userPassword").fill("Lindy123$");
     await page.locator("#login").click();
 
@@ -42,4 +43,8 @@ test('Login Test', async ({page})=>
 
     // 7. Click the checkout button
     await page.getByRole('button', { name: "Checkout"}).click();
+
+    // 8. Make sure the email is pre-populated
+    await expect(page.locator("[style='color: lightgray; font-weight: 600;']")).toContainText(email, {timeout: 20000})
+
 });
