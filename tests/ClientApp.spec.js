@@ -18,12 +18,15 @@ test('Login Test', async ({page})=>
     await page.locator("#userPassword").fill("Lindy123$");
     await page.locator("#login").click();
 
-    // 3. Find the specific product to buy
-    const allTitleContents = await page.locator(".card-body b");
-    const desiredProduct = await allTitleContents.getByText("ADIDAS ORIGINAL");
-    await desiredProduct.waitFor();
+    // Wait for page to load
+    const allTitleContents = await page.locator(".card-body");
+    await allTitleContents.last().waitFor();
 
     // 2. Print titles on page
-    const allTitles = await allTitleContents.allTextContents();
+    const allTitles = await allTitleContents.locator("b").allTextContents();
     console.log(allTitles);
+
+    const targetProductIndex = allTitles.indexOf("ADIDAS ORIGINAL");
+    expect(targetProductIndex >= 0).toBeTruthy();
+    console.log(targetProductIndex);
 });
