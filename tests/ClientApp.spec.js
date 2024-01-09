@@ -27,7 +27,8 @@ test('Login Test', async ({page})=>
     console.log(allTitles);
 
     // 3. Find the product to buy
-    const targetProductIndex = allTitles.indexOf("ADIDAS ORIGINAL");
+    const productName = "ADIDAS ORIGINAL";
+    const targetProductIndex = allTitles.indexOf(productName);
     expect(targetProductIndex >= 0).toBeTruthy();
 
     // 4. Buy the product
@@ -36,4 +37,6 @@ test('Login Test', async ({page})=>
     // 5. Click the cart page
     await page.locator("[routerlink='/dashboard/cart']").click();
 
+    // 6. Check that the right product is present
+    await expect(page.locator(".cartSection h3")).toContainText(productName);
 });
