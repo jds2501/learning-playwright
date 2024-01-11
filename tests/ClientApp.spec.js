@@ -62,4 +62,8 @@ test('Login Test', async ({page})=>
     await page.locator("[name='coupon']").fill("rahulshettyacademy");
     await page.locator("button[type='submit']").click();
     await expect(page.locator(".mt-1.ng-star-inserted")).toContainText("Coupon Applied");
+
+    // 12. Place order
+    await page.locator(".btnn.action__submit.ng-star-inserted").click();
+    await expect(page.locator(".hero-primary")).toContainText("Thankyou for the order.");
 });
