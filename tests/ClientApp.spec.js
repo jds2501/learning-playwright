@@ -76,5 +76,8 @@ test('Login Test', async ({page})=>
     // Check order ID on order history page
     const orderHistoryRows = page.locator("tbody .ng-star-inserted");
     await orderHistoryRows.last().waitFor();
-
+    const orderHistoryIDs = await page.locator("[scope='row']").allTextContents();
+    const orderHistoryIDIndex = orderHistoryIDs.indexOf(orderID[0]);
+    expect(orderHistoryIDIndex >= 0).toBeTruthy();
+    await orderHistoryRows.nth(orderHistoryIDIndex).locator(".btn.btn-primary").click();
 });
