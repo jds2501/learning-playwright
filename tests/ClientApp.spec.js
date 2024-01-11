@@ -45,7 +45,7 @@ test('Login Test', async ({page})=>
     await page.getByRole('button', { name: "Checkout"}).click();
 
     // 8. Make sure the email is pre-populated
-    await expect(page.locator("[style='color: lightgray; font-weight: 600;']")).toHaveText(email, {timeout: 20000})
+    await expect(page.locator("[style='color: lightgray; font-weight: 600;']")).toHaveText(email)
 
     // 9. Verify product & quantity
     await expect(page.locator(".item__title")).toHaveText(productName);
@@ -57,4 +57,9 @@ test('Login Test', async ({page})=>
     const prepopulatedList = page.locator(".ta-item");
     await prepopulatedList.last().waitFor();
     await prepopulatedList.getByText(/.*United States$/).click();
+
+    // 11. Apply coupon
+    await page.locator("[name='coupon']").fill("rahulshettyacademy");
+    await page.locator("button[type='submit']").click();
+    await expect(page.locator(".mt-1.ng-star-inserted")).toContainText("Coupon Applied");
 });
