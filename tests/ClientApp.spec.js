@@ -12,7 +12,7 @@ test('Register Account Interactions', async ({page})=>
 
 test('Login Test', async ({page})=>
 {
-    // 1. Login
+    // Login
     const email = "descript.linking@gmail.com";
     await page.goto("https://rahulshettyacademy.com/client");
     await page.locator("#userEmail").fill(email);
@@ -20,50 +20,61 @@ test('Login Test', async ({page})=>
     await page.locator("#login").click();
 
     // Wait for page to load
-    const allTitleContents = await page.locator(".card-body");
+    const allTitleContents = page.locator(".card-body");
     await allTitleContents.last().waitFor();
 
-    // 2. Print titles on page
+    // Print titles on page
     const allTitles = await allTitleContents.locator("b").allTextContents();
     console.log(allTitles);
 
-    // 3. Find the product to buy
+    // Find the product to buy
     const productName = "ADIDAS ORIGINAL";
     const targetProductIndex = allTitles.indexOf(productName);
     expect(targetProductIndex >= 0).toBeTruthy();
 
-    // 4. Buy the product
+    // Buy the product
     await allTitleContents.nth(targetProductIndex).locator("[style='float: right;']").click();
 
-    // 5. Click the cart page
+    // Click the cart page
     await page.locator("[routerlink='/dashboard/cart']").click();
 
-    // 6. Check that the right product is present
+    // Check that the right product is present
     await expect(page.locator(".cartSection h3")).toContainText(productName);
 
-    // 7. Click the checkout button
+    // Click the checkout button
     await page.getByRole('button', { name: "Checkout"}).click();
 
-    // 8. Make sure the email is pre-populated
+    // Make sure the email is pre-populated
     await expect(page.locator("[style='color: lightgray; font-weight: 600;']")).toHaveText(email)
 
-    // 9. Verify product & quantity
+    // Verify product & quantity
     await expect(page.locator(".item__title")).toHaveText(productName);
     await expect(page.locator(".item__quantity")).toContainText("1");
 
-    // 10. Select country for shipping info from pre-populated list
+    // Select country for shipping info from pre-populated list
     const shippingCountry = page.locator("[placeholder='Select Country']");
     await shippingCountry.pressSequentially("United");
     const prepopulatedList = page.locator(".ta-item");
     await prepopulatedList.last().waitFor();
     await prepopulatedList.getByText(/.*United States$/).click();
 
-    // 11. Apply coupon
+    // Apply coupon
     await page.locator("[name='coupon']").fill("rahulshettyacademy");
     await page.locator("button[type='submit']").click();
     await expect(page.locator(".mt-1.ng-star-inserted")).toContainText("Coupon Applied");
 
-    // 12. Place order
+    // Place order
     await page.locator(".btnn.action__submit.ng-star-inserted").click();
     await expect(page.locator(".hero-primary")).toContainText("Thankyou for the order.");
+
+    // Extract order ID & load order history page
+    const orderIDText = await page.locator("label[class='ng-star-inserted']").textContent();
+    const orderID = orderIDText.match(/[a-z0-9]+/);
+    expect(orderID).toBeTruthy();
+    await page.locator("label[routerlink='/dashboard/myorders']").click();
+
+    // Check order ID on order history page
+    const orderHistoryRows = page.locator("tbody .ng-star-inserted");
+    await orderHistoryRows.last().waitFor();
+
 });
