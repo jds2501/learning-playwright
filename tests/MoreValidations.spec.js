@@ -13,5 +13,4 @@ test('Popup validations', async ({page})=>
     page.on('dialog', dialog => dialog.accept());
     await page.locator("#confirmbtn").click();
     await page.locator("#mousehover").hover();
-    await page.pause();
 });
