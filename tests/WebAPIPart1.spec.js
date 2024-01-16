@@ -1,35 +1,14 @@
 const {test, expect, request} = require('@playwright/test');
+const {APIUtils} = require('./utils/APIUtils');
+const { log } = require('console');
 const loginPayload = {userEmail:"descript.linking@gmail.com",userPassword:"Lindy123$"};
 const orderPayload = {orders: [{country: "Cuba", productOrderedId: "6581ca399fd99c85e8ee7f45"}]}
-let token;
-let orderID;
+let response;
 
 test.beforeAll(async ()=> {
-    // Login API
-   const apiContext = await request.newContext();
-   const loginResponse = await apiContext.post("https://rahulshettyacademy.com/api/ecom/auth/login", 
-   {
-        data: loginPayload
-    });
-
-    // Expecting HTTP 200, 201 code
-    expect(loginResponse.ok()).toBeTruthy();
-
-    const loginResponseJson = await loginResponse.json();
-    token = loginResponseJson.token;
-    console.log(token);
-
-    const orderResponse = await apiContext.post("https://rahulshettyacademy.com/api/ecom/order/create-order",
-    {
-        data: orderPayload,
-        headers: {
-            'Authorization': token,
-            'Content-Type': 'application/json'
-        }
-    });
-    const orderResponseJson = await orderResponse.json();
-    console.log(orderResponseJson);
-    orderID = orderResponseJson.orders[0];
+    const apiContext = await request.newContext();
+    const apiUtils = new APIUtils(apiContext, loginPayload);
+    response = await apiUtils.createOrder(orderPayload);
 });
 
 test('Place the order', async ({page})=>
@@ -38,9 +17,10 @@ test('Place the order', async ({page})=>
     const email = "descript.linking@gmail.com";
     page.addInitScript(value => {
         window.localStorage.setItem('token', value);
-    }, token );
+    }, response.token );
 
     await page.goto("https://rahulshettyacademy.com/client");
+    await page.pause();
 
     // Wait for page to load
     const allTitleContents = page.locator(".card-body");
@@ -52,19 +32,19 @@ test('Place the order', async ({page})=>
     const allTitles = await allTitleContents.locator("b").allTextContents();
     console.log(allTitles);
 
-    expect(orderID).toBeTruthy();
+    expect(response.orderID).toBeTruthy();
     await page.locator("[routerlink='/dashboard/myorders']").click();
 
     // Check order ID on order history page
     const orderHistoryRows = page.locator("tbody .ng-star-inserted");
     await orderHistoryRows.last().waitFor();
     const orderHistoryIDs = await page.locator("[scope='row']").allTextContents();
-    const orderHistoryIDIndex = orderHistoryIDs.indexOf(orderID);
+    const orderHistoryIDIndex = orderHistoryIDs.indexOf(response.orderID);
     expect(orderHistoryIDIndex >= 0).toBeTruthy();
     await orderHistoryRows.nth(orderHistoryIDIndex).locator(".btn.btn-primary").click();
 
     // Check order ID, product name, and billing / delivery address titles on order summary page
-    await expect(page.locator(".col-text.-main")).toHaveText(orderID);
+    await expect(page.locator(".col-text.-main")).toHaveText(response.orderID);
     await expect(page.locator(".title")).toHaveText(productName);
     const orderSummaryAddresses = page.locator(".address");
     expect(await orderSummaryAddresses.count()).toEqual(2);
