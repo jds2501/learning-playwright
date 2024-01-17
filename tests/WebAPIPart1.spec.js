@@ -20,7 +20,6 @@ test('Place the order', async ({page})=>
     }, response.token );
 
     await page.goto("https://rahulshettyacademy.com/client");
-    await page.pause();
 
     // Wait for page to load
     const allTitleContents = page.locator(".card-body");
