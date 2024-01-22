@@ -18,27 +18,12 @@ test('Playwright Practice Exercise', async ({page})=>
     // Login
     const username = "descript.linking@gmail.com";
     const loginPage = new LoginPage(page);
-    loginPage.goTo();
-    loginPage.validLogin(username, "Lindy123$");
+    await loginPage.goTo();
+    const dashboardPage = await loginPage.validLogin(username, "Lindy123$");
 
-    // Wait for page to load
-    const allTitleContents = page.locator(".card-body");
-    await allTitleContents.last().waitFor();
-
-    // Print titles on page
-    const allTitles = await allTitleContents.locator("b").allTextContents();
-    console.log(allTitles);
-
-    // Find the product to buy
     const productName = "ADIDAS ORIGINAL";
-    const targetProductIndex = allTitles.indexOf(productName);
-    expect(targetProductIndex >= 0).toBeTruthy();
-
-    // Buy the product
-    await allTitleContents.nth(targetProductIndex).locator("[style='float: right;']").click();
-
-    // Click the cart page
-    await page.locator("[routerlink='/dashboard/cart']").click();
+    expect(await dashboardPage.addToCart(productName)).toBeTruthy();
+    await dashboardPage.navigateToCart();
 
     // Check that the right product is present
     await expect(page.locator(".cartSection h3")).toContainText(productName);
