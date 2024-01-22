@@ -18,3 +18,22 @@ test('Popup validations', async ({page})=>
     const textCheck = await framesPage.locator(".text h2").textContent();
     console.log(textCheck.split(" ")[1]);
 });
+
+test('Screenshot & Visual Comparison', async ({page})=>
+{
+    await page.goto("https://rahulshettyacademy.com/AutomationPractice/");
+    const displayedText = page.locator("#displayed-text");
+    await expect(displayedText).toBeVisible();
+    await displayedText.screenshot({path: 'displayedText.png'});
+    await page.locator("#hide-textbox").click();
+    await page.screenshot({path: 'fullpage.png'});
+    await expect(displayedText).toBeHidden();
+});
+
+/*
+test('visual', async ({ page }) => {
+    await page.goto("https://www.google.com/");
+    expect(await page.screenshot()).toMatchSnapshot('landing.png');
+});
+*/
+
