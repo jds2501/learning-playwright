@@ -8,7 +8,7 @@ class CheckoutPage {
         this.couponText = page.locator("[name='coupon']");
         this.submitCoupon = page.locator("button[type='submit']");
         this.couponApplied = page.locator(".mt-1.ng-star-inserted");
-        this.placeOrder = page.locator(".btnn.action__submit.ng-star-inserted");
+        this.placeOrderButton = page.locator(".btnn.action__submit.ng-star-inserted");
     }
 
     async getShippingEmail() {
@@ -32,6 +32,10 @@ class CheckoutPage {
         await this.couponText.fill(coupon);
         await this.submitCoupon.click();
         return (await this.couponApplied.textContent()).includes("Coupon Applied");
+    }
+
+    async placeOrder() {
+        await this.placeOrderButton.click();
     }
 }
 

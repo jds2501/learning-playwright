@@ -37,7 +37,7 @@ test('Playwright Practice Exercise', async ({page})=>
     expect(await checkoutPage.applyCoupon("rahulshettyacademy")).toBeTruthy();
 
     // Place order
-    await page.locator(".btnn.action__submit.ng-star-inserted").click();
+    await checkoutPage.placeOrder();
     await expect(page.locator(".hero-primary")).toContainText("Thankyou for the order.");
 
     // Extract order ID & load order history page
@@ -67,7 +67,7 @@ test('Playwright Practice Exercise', async ({page})=>
         const emailCountry = orderSummaryAddresses.nth(i).locator(".text");
         expect(await emailCountry.count()).toEqual(2);
         await expect(emailCountry.nth(0)).toContainText(username);
-        await expect(emailCountry.nth(1)).toContainText("United States");
+        await expect(emailCountry.nth(1)).toContainText(countryName);
     }
 
 
