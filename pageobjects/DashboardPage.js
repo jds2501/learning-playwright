@@ -1,5 +1,8 @@
+const { CartPage } = require('./CartPage');
+
 class DashboardPage {
     constructor(page) {
+        this.page = page;
         this.products = page.locator(".card-body");
         this.productsText = page.locator(".card-body b");
         this.cart = page.locator("[routerlink='/dashboard/cart']");
@@ -24,6 +27,7 @@ class DashboardPage {
 
     async navigateToCart() {
         await this.cart.click();
+        return new CartPage(this.page);
     }
 }
 

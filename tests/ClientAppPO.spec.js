@@ -14,7 +14,6 @@ test('Register Account Interactions', async ({page})=>
 
 test('Playwright Practice Exercise', async ({page})=>
 {
-    // js file- login js, DashboardPage
     // Login
     const username = "descript.linking@gmail.com";
     const loginPage = new LoginPage(page);
@@ -23,20 +22,13 @@ test('Playwright Practice Exercise', async ({page})=>
 
     const productName = "ADIDAS ORIGINAL";
     expect(await dashboardPage.addToCart(productName)).toBeTruthy();
-    await dashboardPage.navigateToCart();
+    const cartPage = await dashboardPage.navigateToCart();
 
-    // Check that the right product is present
-    await expect(page.locator(".cartSection h3")).toContainText(productName);
+    expect((await cartPage.getProductName()) == productName).toBeTruthy();
+    const checkoutPage = await cartPage.checkout();
 
-    // Click the checkout button
-    await page.getByRole('button', { name: "Checkout"}).click();
-
-    // Make sure the email is pre-populated
-    await expect(page.locator("[style='color: lightgray; font-weight: 600;']")).toHaveText(username)
-
-    // Verify product & quantity
-    await expect(page.locator(".item__title")).toHaveText(productName);
-    await expect(page.locator(".item__quantity")).toContainText("1");
+    expect((await checkoutPage.getShippingEmail()) == username).toBeTruthy();
+    expect(await checkoutPage.verifyProductAndQuantity(productName, "1")).toBeTruthy();
 
     // Select country for shipping info from pre-populated list
     const shippingCountry = page.locator("[placeholder='Select Country']");
