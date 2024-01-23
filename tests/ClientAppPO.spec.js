@@ -31,16 +31,10 @@ test('Playwright Practice Exercise', async ({page})=>
     expect(await checkoutPage.verifyProductAndQuantity(productName, "1")).toBeTruthy();
 
     // Select country for shipping info from pre-populated list
-    const shippingCountry = page.locator("[placeholder='Select Country']");
-    await shippingCountry.pressSequentially("United");
-    const prepopulatedList = page.locator(".ta-item");
-    await prepopulatedList.last().waitFor();
-    await prepopulatedList.getByText(/.*United States$/).click();
+    const countryName = "United States";
+    await checkoutPage.selectShippingCountry(countryName);
 
-    // Apply coupon
-    await page.locator("[name='coupon']").fill("rahulshettyacademy");
-    await page.locator("button[type='submit']").click();
-    await expect(page.locator(".mt-1.ng-star-inserted")).toContainText("Coupon Applied");
+    expect(await checkoutPage.applyCoupon("rahulshettyacademy")).toBeTruthy();
 
     // Place order
     await page.locator(".btnn.action__submit.ng-star-inserted").click();
