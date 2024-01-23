@@ -46,15 +46,14 @@ test('Playwright Practice Exercise', async ({page})=>
     const myOrdersPage = await orderThanksPage.openOrderHistoryPage();
 
     // Check order ID on order history page
-    myOrdersPage.viewOrder(orderID[0]);
+    const orderSummaryPage = await myOrdersPage.viewOrder(orderID[0]);
 
     // Check order ID, product name, and billing / delivery address titles on order summary page
-    await expect(page.locator(".col-text.-main")).toHaveText(orderID[0]);
-    await expect(page.locator(".title")).toHaveText(productName);
+    expect(await orderSummaryPage.verifyOrderID(orderID[0])).toBeTruthy();
+    expect(await orderSummaryPage.verifyProductName(productName)).toBeTruthy();
+
     const orderSummaryAddresses = page.locator(".address");
-    expect(await orderSummaryAddresses.count()).toEqual(2);
-    await expect(orderSummaryAddresses.nth(0).locator(".content-title")).toContainText("Billing Address");
-    await expect(orderSummaryAddresses.nth(1).locator(".content-title")).toContainText("Delivery Address");
+    expect(await orderSummaryPage.verifyBillingDeliveryAddressText()).toBeTruthy();
 
     // Check that email & countries are correct on order summary page
     for (let i = 0; i < 2; i++){
