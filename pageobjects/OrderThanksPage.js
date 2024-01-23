@@ -1,3 +1,5 @@
+const { MyOrdersPage } = require('./MyOrdersPage');
+
 class OrderThanksPage {
     constructor(page) {
         this.page = page;
@@ -17,6 +19,7 @@ class OrderThanksPage {
 
     async openOrderHistoryPage () {
         await this.myOrders.click();
+        return new MyOrdersPage(this.page);
     }
 }
 

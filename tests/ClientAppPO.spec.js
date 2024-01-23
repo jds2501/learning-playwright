@@ -43,15 +43,10 @@ test('Playwright Practice Exercise', async ({page})=>
     // Extract order ID & load order history page
     const orderID = await orderThanksPage.getOrderID();
     expect(orderID).toBeTruthy();
-    await orderThanksPage.openOrderHistoryPage();
+    const myOrdersPage = await orderThanksPage.openOrderHistoryPage();
 
     // Check order ID on order history page
-    const orderHistoryRows = page.locator("tbody .ng-star-inserted");
-    await orderHistoryRows.last().waitFor();
-    const orderHistoryIDs = await page.locator("[scope='row']").allTextContents();
-    const orderHistoryIDIndex = orderHistoryIDs.indexOf(orderID[0]);
-    expect(orderHistoryIDIndex >= 0).toBeTruthy();
-    await orderHistoryRows.nth(orderHistoryIDIndex).locator(".btn.btn-primary").click();
+    myOrdersPage.viewOrder(orderID[0]);
 
     // Check order ID, product name, and billing / delivery address titles on order summary page
     await expect(page.locator(".col-text.-main")).toHaveText(orderID[0]);
