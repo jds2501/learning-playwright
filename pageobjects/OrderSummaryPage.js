@@ -14,10 +14,23 @@ class OrderSummaryPage {
         return (await this.productName.textContent()).includes(productName);
     }
 
-    async verifyBillingDeliveryAddressText() {
+    async verifyBillingDeliveryAddressDefaultText() {
         return ((await this.orderSummaryAddresses.count() == 2) &&
             (await this.orderSummaryAddresses.nth(0).locator(".content-title").textContent()).includes("Billing Address") &&
             (await this.orderSummaryAddresses.nth(1).locator(".content-title").textContent()).includes("Delivery Address"));
+    }
+
+    async verifyAddresses(username, countryName) {
+        let verified = this.verifyBillingDeliveryAddressDefaultText();
+
+        for (let i = 0; verified && i < 2; i++) {
+            const emailCountry = this.orderSummaryAddresses.nth(i).locator(".text");
+            verified = (await emailCountry.count()) == 2 &&
+                (await emailCountry.nth(0).textContent()).includes(username) &&
+                (await emailCountry.nth(1).textContent()).includes(countryName);
+        }
+
+        return verified;
     }
 }
 

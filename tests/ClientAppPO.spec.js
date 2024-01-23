@@ -51,17 +51,5 @@ test('Playwright Practice Exercise', async ({page})=>
     // Check order ID, product name, and billing / delivery address titles on order summary page
     expect(await orderSummaryPage.verifyOrderID(orderID[0])).toBeTruthy();
     expect(await orderSummaryPage.verifyProductName(productName)).toBeTruthy();
-
-    const orderSummaryAddresses = page.locator(".address");
-    expect(await orderSummaryPage.verifyBillingDeliveryAddressText()).toBeTruthy();
-
-    // Check that email & countries are correct on order summary page
-    for (let i = 0; i < 2; i++){
-        const emailCountry = orderSummaryAddresses.nth(i).locator(".text");
-        expect(await emailCountry.count()).toEqual(2);
-        await expect(emailCountry.nth(0)).toContainText(username);
-        await expect(emailCountry.nth(1)).toContainText(countryName);
-    }
-
-
+    expect(await orderSummaryPage.verifyAddresses(username, countryName)).toBeTruthy();
 });
