@@ -37,14 +37,13 @@ test('Playwright Practice Exercise', async ({page})=>
     expect(await checkoutPage.applyCoupon("rahulshettyacademy")).toBeTruthy();
 
     // Place order
-    await checkoutPage.placeOrder();
-    await expect(page.locator(".hero-primary")).toContainText("Thankyou for the order.");
+    const orderThanksPage = await checkoutPage.placeOrder();
+    expect(await orderThanksPage.verifyThankYou()).toBeTruthy();
 
     // Extract order ID & load order history page
-    const orderIDText = await page.locator("label[class='ng-star-inserted']").textContent();
-    const orderID = orderIDText.match(/[a-z0-9]+/);
+    const orderID = await orderThanksPage.getOrderID();
     expect(orderID).toBeTruthy();
-    await page.locator("label[routerlink='/dashboard/myorders']").click();
+    await orderThanksPage.openOrderHistoryPage();
 
     // Check order ID on order history page
     const orderHistoryRows = page.locator("tbody .ng-star-inserted");
