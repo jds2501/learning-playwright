@@ -1,5 +1,5 @@
 const {test, expect} = require('@playwright/test');
-const { LoginPage } = require('../pageobjects/LoginPage');
+const { POManager } = require('../pageobjects/POManager');
 
 
 test('Register Account Interactions', async ({page})=>
@@ -14,18 +14,23 @@ test('Register Account Interactions', async ({page})=>
 
 test('Playwright Practice Exercise', async ({page})=>
 {
+    const poManager = new POManager(page);
+
     // Login
     const username = "descript.linking@gmail.com";
-    const loginPage = new LoginPage(page);
+    const loginPage = poManager.getLoginPage();
     await loginPage.goTo();
-    const dashboardPage = await loginPage.validLogin(username, "Lindy123$");
+    await loginPage.validLogin(username, "Lindy123$");
+    const dashboardPage = poManager.getDashboardPage();
 
     const productName = "ADIDAS ORIGINAL";
     expect(await dashboardPage.addToCart(productName)).toBeTruthy();
-    const cartPage = await dashboardPage.navigateToCart();
+    await dashboardPage.navigateToCart();
+    const cartPage = poManager.getCartPage();
 
     expect((await cartPage.getProductName()) == productName).toBeTruthy();
-    const checkoutPage = await cartPage.checkout();
+    await cartPage.checkout();
+    const checkoutPage = poManager.getCheckoutPage();
 
     expect((await checkoutPage.getShippingEmail()) == username).toBeTruthy();
     expect(await checkoutPage.verifyProductAndQuantity(productName, "1")).toBeTruthy();
@@ -37,16 +42,19 @@ test('Playwright Practice Exercise', async ({page})=>
     expect(await checkoutPage.applyCoupon("rahulshettyacademy")).toBeTruthy();
 
     // Place order
-    const orderThanksPage = await checkoutPage.placeOrder();
+    await checkoutPage.placeOrder();
+    const orderThanksPage = poManager.getOrderThanksPage();
     expect(await orderThanksPage.verifyThankYou()).toBeTruthy();
 
     // Extract order ID & load order history page
     const orderID = await orderThanksPage.getOrderID();
     expect(orderID).toBeTruthy();
-    const myOrdersPage = await orderThanksPage.openOrderHistoryPage();
+    await orderThanksPage.openOrderHistoryPage();
+    const myOrdersPage = poManager.getMyOrdersPage();
 
     // Check order ID on order history page
-    const orderSummaryPage = await myOrdersPage.viewOrder(orderID[0]);
+    await myOrdersPage.viewOrder(orderID[0]);
+    const orderSummaryPage = poManager.getOrderSummaryPage();
 
     // Check order ID, product name, and billing / delivery address titles on order summary page
     expect(await orderSummaryPage.verifyOrderID(orderID[0])).toBeTruthy();

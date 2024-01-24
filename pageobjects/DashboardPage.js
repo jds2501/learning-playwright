@@ -1,5 +1,3 @@
-const { CartPage } = require('./CartPage');
-
 class DashboardPage {
     constructor(page) {
         this.page = page;
@@ -27,7 +25,6 @@ class DashboardPage {
 
     async navigateToCart() {
         await this.cart.click();
-        return new CartPage(this.page);
     }
 }
 

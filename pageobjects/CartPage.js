@@ -1,5 +1,3 @@
-const { CheckoutPage } = require('./CheckoutPage');
-
 class CartPage {
     constructor(page) {
         this.page = page;
@@ -13,7 +11,6 @@ class CartPage {
 
     async checkout() {
         await this.checkoutButton.click();
-        return new CheckoutPage(this.page);
     }
 }
 

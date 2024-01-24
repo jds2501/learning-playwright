@@ -1,5 +1,3 @@
-const { OrderSummaryPage } = require('./OrderSummaryPage');
-
 class MyOrdersPage {
     constructor(page) {
         this.page = page;
@@ -16,7 +14,6 @@ class MyOrdersPage {
     async viewOrder (order) {
         const orderID = await this.getOrderIDIndex(order);
         await this.orderHistoryRows.nth(orderID).locator(".btn.btn-primary").click();
-        return new OrderSummaryPage(this.page);
     }
 }
 
