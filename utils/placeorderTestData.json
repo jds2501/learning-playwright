@@ -1,5 +1,12 @@
-{
-    "username" : "descript.linking@gmail.com",
-    "password" : "Lindy123$",
-    "productName" : "ADIDAS ORIGINAL"
-}
+[
+    {
+        "username" : "descript.linking@gmail.com",
+        "password" : "Lindy123$",
+        "productName" : "ADIDAS ORIGINAL"
+    },
+    {
+        "username" : "descript.linking@gmail.com",
+        "password" : "Lindy123$",
+        "productName" : "IPHONE 13 PRO"
+    }
+]
