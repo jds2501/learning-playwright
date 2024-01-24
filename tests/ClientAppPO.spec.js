@@ -1,5 +1,6 @@
 const {test, expect} = require('@playwright/test');
 const { POManager } = require('../pageobjects/POManager');
+const dataset = JSON.parse(JSON.stringify(require("../utils/placeorderTestData.json")));
 
 
 test('Register Account Interactions', async ({page})=>
@@ -15,30 +16,26 @@ test('Register Account Interactions', async ({page})=>
 test('Playwright Practice Exercise', async ({page})=>
 {
     const poManager = new POManager(page);
+    const countryName = "United States";
 
-    // Login
-    const username = "descript.linking@gmail.com";
     const loginPage = poManager.getLoginPage();
     await loginPage.goTo();
-    await loginPage.validLogin(username, "Lindy123$");
+    await loginPage.validLogin(dataset.username, dataset.password);
     const dashboardPage = poManager.getDashboardPage();
 
-    const productName = "ADIDAS ORIGINAL";
-    expect(await dashboardPage.addToCart(productName)).toBeTruthy();
+    expect(await dashboardPage.addToCart(dataset.productName)).toBeTruthy();
     await dashboardPage.navigateToCart();
     const cartPage = poManager.getCartPage();
 
-    expect((await cartPage.getProductName()) == productName).toBeTruthy();
+    expect((await cartPage.getProductName()) == dataset.productName).toBeTruthy();
     await cartPage.checkout();
     const checkoutPage = poManager.getCheckoutPage();
 
-    expect((await checkoutPage.getShippingEmail()) == username).toBeTruthy();
-    expect(await checkoutPage.verifyProductAndQuantity(productName, "1")).toBeTruthy();
+    expect((await checkoutPage.getShippingEmail()) == dataset.username).toBeTruthy();
+    expect(await checkoutPage.verifyProductAndQuantity(dataset.productName, "1")).toBeTruthy();
 
     // Select country for shipping info from pre-populated list
-    const countryName = "United States";
     await checkoutPage.selectShippingCountry(countryName);
-
     expect(await checkoutPage.applyCoupon("rahulshettyacademy")).toBeTruthy();
 
     // Place order
@@ -58,6 +55,6 @@ test('Playwright Practice Exercise', async ({page})=>
 
     // Check order ID, product name, and billing / delivery address titles on order summary page
     expect(await orderSummaryPage.verifyOrderID(orderID[0])).toBeTruthy();
-    expect(await orderSummaryPage.verifyProductName(productName)).toBeTruthy();
-    expect(await orderSummaryPage.verifyAddresses(username, countryName)).toBeTruthy();
+    expect(await orderSummaryPage.verifyProductName(dataset.productName)).toBeTruthy();
+    expect(await orderSummaryPage.verifyAddresses(dataset.username, countryName)).toBeTruthy();
 });
