@@ -21,16 +21,21 @@ module.exports = defineConfig({
         browserName: 'webkit',
         headless: false,
         screenshot : 'only-on-failure',
-        trace: 'retain-on-failure'
+        trace: 'retain-on-failure',
+        ...devices['iPhone 11']
       }
     },
     {
       name : 'Chrome',
       use: {
         browserName: 'chromium',
-        headless: true,
+        headless: false,
         screenshot : 'only-on-failure',
-        trace: 'retain-on-failure'
+        video : 'retain-on-failure',
+        ignoreHTTPSErrors: true,
+        permissions: ['geolocation'],
+        trace: 'retain-on-failure',
+        viewport : {width:720, height:720}
       }
     }
 
