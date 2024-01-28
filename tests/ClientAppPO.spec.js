@@ -15,7 +15,7 @@ test('Register Account Interactions', async ({ page }) => {
 
 for (const data of dataset) {
 
-    test(`Playwright Practice Exercise for ${data.productName}`, async ({ page }) => {
+    test(`@Web Playwright Practice Exercise for ${data.productName}`, async ({ page }) => {
         const poManager = new POManager(page);
         const countryName = "United States";
 
