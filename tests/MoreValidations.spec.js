@@ -1,5 +1,7 @@
 const {test, expect} = require('@playwright/test');
 
+test.describe.configure({mode: "serial"});
+
 test('Popup validations', async ({page})=>
 {
     await page.goto("https://rahulshettyacademy.com/AutomationPractice/");
