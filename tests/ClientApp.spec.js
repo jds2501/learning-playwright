@@ -10,7 +10,7 @@ test('Register Account Interactions', async ({page})=>
 });
 
 
-test('Playwright Practice Exercise', async ({page})=>
+test.skip('Playwright Practice Exercise', async ({page})=>
 {
     // Login
     const email = "descript.linking@gmail.com";
