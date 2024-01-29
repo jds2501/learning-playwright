@@ -21,7 +21,7 @@ module.exports = defineConfig({
       name: 'Safari',
       use: {
         browserName: 'webkit',
-        headless: false,
+        headless: true,
         screenshot : 'only-on-failure',
         trace: 'retain-on-failure',
         ...devices['iPhone 11']
