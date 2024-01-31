@@ -17,5 +17,8 @@
     "@types/node": "^20.10.5",
     "allure-commandline": "^2.26.0",
     "allure-playwright": "^2.11.1"
+  },
+  "dependencies": {
+    "@cucumber/cucumber": "^10.3.1"
   }
 }

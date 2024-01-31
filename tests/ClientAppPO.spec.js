@@ -22,16 +22,16 @@ for (const data of dataset) {
         const loginPage = poManager.getLoginPage();
         await loginPage.goTo();
         await loginPage.validLogin(data.username, data.password);
-        const dashboardPage = poManager.getDashboardPage();
 
+        const dashboardPage = poManager.getDashboardPage();
         expect(await dashboardPage.addToCart(data.productName)).toBeTruthy();
         await dashboardPage.navigateToCart();
-        const cartPage = poManager.getCartPage();
 
+        const cartPage = poManager.getCartPage();
         expect((await cartPage.getProductName()) == data.productName).toBeTruthy();
         await cartPage.checkout();
-        const checkoutPage = poManager.getCheckoutPage();
 
+        const checkoutPage = poManager.getCheckoutPage();
         expect((await checkoutPage.getShippingEmail()) == data.username).toBeTruthy();
         expect(await checkoutPage.verifyProductAndQuantity(data.productName, "1")).toBeTruthy();
 
