@@ -8,6 +8,21 @@ Given('a login to Ecommerce application with {string} and {string}', { timeout: 
     await loginPage.validLogin(username, password);
 });
 
+Given('a login to Ecommerce2 application with {string} and {string}', async function (username, password) {
+    const usernameField = this.page.locator('#username');
+    const signInBtn = this.page.locator("#signInBtn");
+    await this.page.goto("https://rahulshettyacademy.com/loginpagePractise/");
+    console.log(await this.page.title());
+    await usernameField.fill(username);
+    await this.page.locator("[type='password']").fill(password);
+    await signInBtn.click();
+});
+
+Then('Verify Error message is displayed', async function () {
+    console.log(await this.page.locator("[style*='block']").textContent());
+    await expect(this.page.locator("[style*='block']")).toContainText('Incorrect');
+});
+
 When('Add {string} to Cart', async function (productName) {
     const dashboardPage = this.poManager.getDashboardPage();
     expect(await dashboardPage.addToCart(productName)).toBeTruthy();

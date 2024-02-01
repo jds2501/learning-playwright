@@ -1,5 +1,5 @@
 Feature: Ecommerce validations
-
+  @Regression
   Scenario: Placing the order
     Given a login to Ecommerce application with "descript.linking@gmail.com" and "Lindy123$"
     When Add "ZARA COAT 3" to Cart
