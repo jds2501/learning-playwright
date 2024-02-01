@@ -1,27 +1,21 @@
 const { Given, When, Then } = require('@cucumber/cucumber');
-const { POManager } = require('../../pageobjects/POManager');
 const { expect } = require('@playwright/test');
-const playwright = require('@playwright/test');
 
-Given('a login to Ecommerce application with {string} and {string}', {timeout: 100 * 1000}, async function (username, password) {
-    const browser = await playwright.chromium.launch({headless: false}); 
-    const context = await browser.newContext();
-    const page = await context.newPage(); 
-    this.poManager = new POManager(page);    
+Given('a login to Ecommerce application with {string} and {string}', { timeout: 100 * 1000 }, async function (username, password) {
     this.username = username;
     const loginPage = this.poManager.getLoginPage();
     await loginPage.goTo();
     await loginPage.validLogin(username, password);
 });
 
-When('Add {string} to Cart', async function (productName) {      
+When('Add {string} to Cart', async function (productName) {
     const dashboardPage = this.poManager.getDashboardPage();
     expect(await dashboardPage.addToCart(productName)).toBeTruthy();
     await dashboardPage.navigateToCart();
     this.productName = productName;
 });
 
-Then('Verify {string} is displayed in the Cart', async function (productName) {       
+Then('Verify {string} is displayed in the Cart', async function (productName) {
     const cartPage = this.poManager.getCartPage();
     expect((await cartPage.getProductName()) == productName).toBeTruthy();
     await cartPage.checkout();
